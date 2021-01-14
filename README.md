@@ -1,6 +1,6 @@
 # theScore "the Rush" Interview Challenge
 
-[![Build Status](https://github.com/cardoso010/nfl_rushing/workflows/CI/badge.svg?branch=master)](https://github.com/cardoso010/nfl_rushing/actions)
+[![Build Status](https://github.com/cardoso010/nfl_rushing/workflows/CI/badge.svg?branch=main)](https://github.com/cardoso010/nfl_rushing/actions)
 
 At theScore, we are always looking for intelligent, resourceful, full-stack developers to join our growing team. To help us evaluate new talent, we have created this take-home interview question. This question should take you no more than a few hours.
 
