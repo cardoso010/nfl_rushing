@@ -17,8 +17,8 @@ defmodule NflRushingWeb.Router do
   scope "/", NflRushingWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
-    live "/football_players", FootballPlayerLive.Index, :index
+    # live "/", PageLive, :index
+    live "/", FootballPlayerLive.Index, :index
     live "/football_players/new", FootballPlayerLive.Index, :new
     live "/football_players/:id/edit", FootballPlayerLive.Index, :edit
 
