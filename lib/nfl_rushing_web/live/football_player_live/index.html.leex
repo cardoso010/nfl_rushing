@@ -1,67 +1,98 @@
-<h1>Football Players' rushing statistics</h1>
+<h1>Football Players statistics</h1>
+<hr>
+<div>
+  <form phx-change="select-per-page">
+    Show
+    <select name="per-page">
+      <%= options_for_select([5, 10, 15, 20], @options.per_page) %>
+    </select>
+    <label for="per-page">per page</label>
+  </form>
 
-<%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, NflRushingWeb.FootballPlayerLive.FormComponent,
-    id: @football_player.id || :new,
-    title: @page_title,
-    action: @live_action,
-    football_player: @football_player,
-    return_to: Routes.football_player_index_path(@socket, :index) %>
-<% end %>
+  <%= if @live_action in [:new, :edit] do %>
+    <%= live_modal @socket, NflRushingWeb.FootballPlayerLive.FormComponent,
+      id: @football_player.id || :new,
+      title: @page_title,
+      action: @live_action,
+      football_player: @football_player,
+      return_to: Routes.football_player_index_path(@socket, :index) %>
+  <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Player</th>
-      <th>Team</th>
-      <th>Pos</th>
-      <th>Att/G</th>
-      <th>Att</th>
-      <th>Yds</th>
-      <th>Avg</th>
-      <th>Yds/G</th>
-      <th>Td</th>
-      <th>Lng</th>
-      <th>1st</th>
-      <th>1st%</th>
-      <th>20+</th>
-      <th>40+</th>
-      <th>FUM</th>
-
-      <!--
-      <th></th>
-      -->
-    </tr>
-  </thead>
-  <tbody id="football_players">
-    <%= for football_player <- @football_players do %>
-      <tr id="football_player-<%= football_player.id %>">
-        <td><%= football_player.player %></td>
-        <td><%= football_player.team %></td>
-        <td><%= football_player.pos %></td>
-        <td><%= football_player.att_g %></td>
-        <td><%= football_player.att %></td>
-        <td><%= football_player.yds %></td>
-        <td><%= football_player.avg %></td>
-        <td><%= football_player.yds_g %></td>
-        <td><%= football_player.td %></td>
-        <td><%= football_player.lng %></td>
-        <td><%= football_player.first_down %></td>
-        <td><%= football_player.first_down_porcent %></td>
-        <td><%= football_player.twenty_plus %></td>
-        <td><%= football_player.forty_plus %></td>
-        <td><%= football_player.fum %></td>
+  <table>
+    <thead>
+      <tr>
+        <th>Player</th>
+        <th>Team</th>
+        <th>Pos</th>
+        <th>Att/G</th>
+        <th>Att</th>
+        <th>Yds</th>
+        <th>Avg</th>
+        <th>Yds/G</th>
+        <th>Td</th>
+        <th>Lng</th>
+        <th>1st</th>
+        <th>1st%</th>
+        <th>20+</th>
+        <th>40+</th>
+        <th>FUM</th>
 
         <!--
-        <td>
-          <span><%= live_redirect "Show", to: Routes.football_player_show_path(@socket, :show, football_player) %></span>
-          <span><%= live_patch "Edit", to: Routes.football_player_index_path(@socket, :edit, football_player) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: football_player.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
+        <th></th>
         -->
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody id="football_players">
+      <%= for football_player <- @football_players do %>
+        <tr id="football_player-<%= football_player.id %>">
+          <td><%= football_player.player %></td>
+          <td><%= football_player.team %></td>
+          <td><%= football_player.pos %></td>
+          <td><%= football_player.att_g %></td>
+          <td><%= football_player.att %></td>
+          <td><%= football_player.yds %></td>
+          <td><%= football_player.avg %></td>
+          <td><%= football_player.yds_g %></td>
+          <td><%= football_player.td %></td>
+          <td><%= football_player.lng %></td>
+          <td><%= football_player.first_down %></td>
+          <td><%= football_player.first_down_porcent %></td>
+          <td><%= football_player.twenty_plus %></td>
+          <td><%= football_player.forty_plus %></td>
+          <td><%= football_player.fum %></td>
 
-<span><%= live_patch "New Football player", to: Routes.football_player_index_path(@socket, :new) %></span>
+          <!--
+          <td>
+            <span><%= live_redirect "Show", to: Routes.football_player_show_path(@socket, :show, football_player) %></span>
+            <span><%= live_patch "Edit", to: Routes.football_player_index_path(@socket, :edit, football_player) %></span>
+            <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: football_player.id, data: [confirm: "Are you sure?"] %></span>
+          </td>
+          -->
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="footer">
+    <div class="pagination">
+      <%= if @options.page > 1 do %>
+        <%= pagination_link(@socket,
+                            "Previous",
+                            @options.page - 1,
+                            @options.per_page,
+                            "previous") %>
+      <% end %>
+      <%= for i <- (@options.page - 2)..(@options.page + 2), i > 0 do %>
+        <%= pagination_link(@socket,
+                              i,
+                              i,
+                              @options.per_page,
+                              (if i == @options.page, do: "active")) %>
+      <% end %>
+      <%= pagination_link(@socket,
+                            "Next",
+                            @options.page + 1,
+                            @options.per_page,
+                            "next") %>
+    </div>
+  </div>
+</div>

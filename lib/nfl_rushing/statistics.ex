@@ -9,6 +9,32 @@ defmodule NflRushing.Statistics do
   alias NflRushing.Statistics.FootballPlayer
 
   @doc """
+  Returns a list of football_players matching the given `criteria`.
+
+  Example Criteria:
+
+  [
+   paginate: %{page: 2, per_page: 5},
+   sort: %{sort_by: :item, sort_order: :asc}
+  ]
+  """
+
+  def list_football_players(criteria) when is_list(criteria) do
+    query = from(d in FootballPlayer)
+
+    Enum.reduce(criteria, query, fn
+      {:paginate, %{page: page, per_page: per_page}}, query ->
+        from q in query,
+          offset: ^((page - 1) * per_page),
+          limit: ^per_page
+
+      {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
+        from q in query, order_by: [{^sort_order, ^sort_by}]
+    end)
+    |> Repo.all()
+  end
+
+  @doc """
   Returns the list of football_players.
 
   ## Examples
