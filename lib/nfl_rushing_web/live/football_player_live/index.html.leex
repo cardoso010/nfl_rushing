@@ -28,7 +28,9 @@
       <th>40+</th>
       <th>FUM</th>
 
+      <!--
       <th></th>
+      -->
     </tr>
   </thead>
   <tbody id="football_players">
@@ -50,11 +52,13 @@
         <td><%= football_player.forty_plus %></td>
         <td><%= football_player.fum %></td>
 
+        <!--
         <td>
           <span><%= live_redirect "Show", to: Routes.football_player_show_path(@socket, :show, football_player) %></span>
           <span><%= live_patch "Edit", to: Routes.football_player_index_path(@socket, :edit, football_player) %></span>
           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: football_player.id, data: [confirm: "Are you sure?"] %></span>
         </td>
+        -->
       </tr>
     <% end %>
   </tbody>
