@@ -15,7 +15,8 @@ defmodule NflRushing.Statistics do
 
   [
    paginate: %{page: 2, per_page: 5},
-   sort: %{sort_by: :item, sort_order: :asc}
+   sort: %{sort_by: :item, sort_order: :asc},
+   filter: %{player: ""}
   ]
   """
 
@@ -30,6 +31,9 @@ defmodule NflRushing.Statistics do
 
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         from q in query, order_by: [{^sort_order, ^sort_by}]
+
+      {:filter, %{player: player}}, query ->
+        from q in query, where: like(q.player, ^"%#{player}%")
     end)
     |> Repo.all()
   end
