@@ -1,13 +1,26 @@
 <h1>Football Players statistics</h1>
 <hr>
 <div>
-  <form phx-change="select-per-page">
-    Show
-    <select name="per-page">
-      <%= options_for_select([5, 10, 15, 20], @options.per_page) %>
-    </select>
-    <label for="per-page">per page</label>
-  </form>
+  <div class"player_left">
+    <form phx-change="filter">
+      <div class="filters">
+        <label for="player">Player</label>
+        <input type="text" name="player" value="<%= @options.player %>" />
+      </div>
+    </form>
+  </div>
+  
+  <div class"right">
+    <form phx-change="select-per-page">
+      Show
+      <select name="per-page">
+        <%= options_for_select([5, 10, 15, 20], @options.per_page) %>
+      </select>
+      <label for="per-page">per page</label>
+    </form>
+  </div>
+
+  <a href="#" phx-click="clear">Clear All</a>
 
   <%= if @live_action in [:new, :edit] do %>
     <%= live_modal @socket, NflRushingWeb.FootballPlayerLive.FormComponent,
