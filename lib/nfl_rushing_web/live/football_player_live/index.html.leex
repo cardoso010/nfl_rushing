@@ -36,15 +36,6 @@
     </p>
   <% end %>
 
-  <%= if @live_action in [:new, :edit] do %>
-    <%= live_modal @socket, NflRushingWeb.FootballPlayerLive.FormComponent,
-      id: @football_player.id || :new,
-      title: @page_title,
-      action: @live_action,
-      football_player: @football_player,
-      return_to: Routes.football_player_index_path(@socket, :index) %>
-  <% end %>
-
   <table>
     <thead>
       <tr>
@@ -63,10 +54,6 @@
         <th>20+</th>
         <th>40+</th>
         <th>FUM</th>
-
-        <!--
-        <th></th>
-        -->
       </tr>
     </thead>
     <tbody id="football_players">
@@ -87,14 +74,6 @@
           <td><%= football_player.twenty_plus %></td>
           <td><%= football_player.forty_plus %></td>
           <td><%= football_player.fum %></td>
-
-          <!--
-          <td>
-            <span><%= live_redirect "Show", to: Routes.football_player_show_path(@socket, :show, football_player) %></span>
-            <span><%= live_patch "Edit", to: Routes.football_player_index_path(@socket, :edit, football_player) %></span>
-            <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: football_player.id, data: [confirm: "Are you sure?"] %></span>
-          </td>
-          -->
         </tr>
       <% end %>
     </tbody>

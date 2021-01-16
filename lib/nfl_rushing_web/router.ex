@@ -19,11 +19,6 @@ defmodule NflRushingWeb.Router do
 
     # live "/", PageLive, :index
     live "/", FootballPlayerLive.Index, :index
-    live "/football_players/new", FootballPlayerLive.Index, :new
-    live "/football_players/:id/edit", FootballPlayerLive.Index, :edit
-
-    live "/football_players/:id", FootballPlayerLive.Show, :show
-    live "/football_players/:id/show/edit", FootballPlayerLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
