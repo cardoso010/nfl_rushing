@@ -178,7 +178,7 @@ defmodule NflRushingWeb.FootballPlayerLive.Index do
     }
   end
 
-  defp pagination_link(socket, text, page, options) do
+  defp pagination_link(socket, text, page, options, class) do
     live_patch(text,
       to:
         Routes.football_player_index_path(
@@ -189,7 +189,8 @@ defmodule NflRushingWeb.FootballPlayerLive.Index do
           sort_by: options.sort_by,
           sort_order: options.sort_order,
           player: options.player
-        )
+        ),
+      class: class
     )
   end
 
