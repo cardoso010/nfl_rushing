@@ -19,22 +19,10 @@ defmodule NflRushing.Statistics do
    filter: %{player: ""}
   ]
   """
-
   def list_football_players(criteria) when is_list(criteria) do
     query = from(d in FootballPlayer)
 
-    Enum.reduce(criteria, query, fn
-      {:paginate, %{page: page, per_page: per_page}}, query ->
-        from q in query,
-          offset: ^((page - 1) * per_page),
-          limit: ^per_page
-
-      {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
-        from q in query, order_by: [{^sort_order, ^sort_by}]
-
-      {:filter, %{player: player}}, query ->
-        from q in query, where: like(q.player, ^"%#{player}%")
-    end)
+    create_filter_query(query, criteria)
     |> Repo.all()
   end
 
@@ -130,5 +118,31 @@ defmodule NflRushing.Statistics do
   """
   def change_football_player(%FootballPlayer{} = football_player, attrs \\ %{}) do
     FootballPlayer.changeset(football_player, attrs)
+  end
+
+  @doc """
+  Return a Stream of football players with criteria
+  """
+  def get_stream_from_football_players(criteria) when is_list(criteria) do
+    Repo.transaction(fn ->
+      from(row in FootballPlayer)
+      |> create_filter_query(criteria)
+      |> Repo.stream()
+    end)
+  end
+
+  defp create_filter_query(query, criteria) when is_list(criteria) do
+    Enum.reduce(criteria, query, fn
+      {:paginate, %{page: page, per_page: per_page}}, query ->
+        from q in query,
+          offset: ^((page - 1) * per_page),
+          limit: ^per_page
+
+      {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
+        from q in query, order_by: [{^sort_order, ^sort_by}]
+
+      {:filter, %{player: player}}, query ->
+        from q in query, where: like(q.player, ^"%#{player}%")
+    end)
   end
 end

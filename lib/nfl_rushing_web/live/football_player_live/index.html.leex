@@ -10,17 +10,31 @@
     </form>
   </div>
   
-  <div class"right">
-    <form phx-change="select-per-page">
-      Show
-      <select name="per-page">
-        <%= options_for_select([5, 10, 15, 20], @options.per_page) %>
-      </select>
-      <label for="per-page">per page</label>
-    </form>
-  </div>
-
-  <a href="#" phx-click="clear">Clear All</a>
+  <p>
+    <div class"right">
+      <form phx-change="select-per-page">
+        Show
+        <select name="per-page">
+          <%= options_for_select([5, 10, 15, 20], @options.per_page) %>
+        </select>
+        <b>per page</b>
+      </form>
+    </div>
+  </p>
+  
+  <p>
+    <a href="#" phx-click="clear">Clear All</a>
+  </p>
+  
+  <p>
+    <a href="#" phx-click="prepare_file">Prepare file to download</a>
+  </p>
+  
+  <%= if @link_download != nil && String.length(@link_download) > 0 do %>
+    <p>
+      <a href="<%= @link_download %>" phx-value="<%= @link_download %>" download phx-click="after_download">Dowload</a>
+    </p>
+  <% end %>
 
   <%= if @live_action in [:new, :edit] do %>
     <%= live_modal @socket, NflRushingWeb.FootballPlayerLive.FormComponent,

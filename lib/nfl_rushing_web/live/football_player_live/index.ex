@@ -3,10 +3,12 @@ defmodule NflRushingWeb.FootballPlayerLive.Index do
 
   alias NflRushing.Statistics
   alias NflRushing.Statistics.FootballPlayer
+  alias NflRushing.Utils.CsvDownload
+  alias NflRushing.Utils.Randomizer
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket, temporary_assigns: [football_players: []]}
+    {:ok, socket, temporary_assigns: [football_players: [], link_download: nil]}
   end
 
   @impl true
@@ -16,7 +18,8 @@ defmodule NflRushingWeb.FootballPlayerLive.Index do
     football_players =
       Statistics.list_football_players(
         paginate: params_formated.paginate_options,
-        sort: params_formated.sort_options
+        sort: params_formated.sort_options,
+        filter: params_formated.filter
       )
 
     options =
@@ -26,7 +29,8 @@ defmodule NflRushingWeb.FootballPlayerLive.Index do
     socket =
       assign(socket,
         options: options,
-        football_players: football_players
+        football_players: football_players,
+        link_download: params_formated.link_download
       )
 
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
@@ -54,25 +58,24 @@ defmodule NflRushingWeb.FootballPlayerLive.Index do
   end
 
   def handle_event("filter", %{"player" => player}, socket) do
-    paginate = %{page: socket.assigns.options.page, per_page: socket.assigns.options.per_page}
-
-    sort = %{
-      sort_by: socket.assigns.options.sort_by,
-      sort_order: socket.assigns.options.sort_order
-    }
+    params = get_params_from_socket(socket)
 
     filter = %{player: String.capitalize(player)}
 
     football_players =
-      Statistics.list_football_players(paginate: paginate, sort: sort, filter: filter)
+      Statistics.list_football_players(
+        paginate: params.paginate,
+        sort: params.sort,
+        filter: filter
+      )
 
-    options = Map.merge(paginate, sort) |> Map.put(:player, filter.player)
+    options = Map.merge(params.paginate, params.sort) |> Map.put(:player, filter.player)
 
     socket =
       assign(
         socket,
         [options: options] ++
-          [football_players: football_players]
+          [football_players: football_players, link_download: ""]
       )
 
     {:noreply, socket}
@@ -97,11 +100,57 @@ defmodule NflRushingWeb.FootballPlayerLive.Index do
             per_page: 5,
             sort_by: :id,
             sort_order: :asc,
-            player: ""
+            player: "",
+            link_download: ""
           )
       )
 
     {:noreply, socket}
+  end
+
+  def handle_event("prepare_file", _, socket) do
+    filename = Randomizer.randomizer(12)
+    params = get_params_from_socket(socket)
+
+    CsvDownload.generate_csv(
+      [sort: params.sort, filter: params.filter],
+      filename
+    )
+
+    link_download = Routes.static_path(socket, "/downloads/#{filename}.csv")
+
+    socket =
+      assign(
+        socket,
+        :link_download,
+        link_download
+      )
+
+    {:noreply, socket}
+  end
+
+  def handle_event("after_download", _, socket) do
+    socket =
+      assign(
+        socket,
+        :link_download,
+        ""
+      )
+
+    {:noreply, socket}
+  end
+
+  defp get_params_from_socket(socket) do
+    paginate = %{page: socket.assigns.options.page, per_page: socket.assigns.options.per_page}
+
+    sort = %{
+      sort_by: socket.assigns.options.sort_by,
+      sort_order: socket.assigns.options.sort_order
+    }
+
+    filter = %{player: String.capitalize(socket.assigns.options.player)}
+
+    %{paginate: paginate, sort: sort, filter: filter}
   end
 
   defp get_params_formated(params) do
@@ -113,10 +162,20 @@ defmodule NflRushingWeb.FootballPlayerLive.Index do
 
     player = params["player"] || ""
 
+    link_download = params["link_download"] || nil
+
     paginate_options = %{page: page, per_page: per_page}
     sort_options = %{sort_by: sort_by, sort_order: sort_order}
 
-    %{paginate_options: paginate_options, sort_options: sort_options, player: player}
+    filter = %{player: String.capitalize(player)}
+
+    %{
+      paginate_options: paginate_options,
+      sort_options: sort_options,
+      filter: filter,
+      player: player,
+      link_download: link_download
+    }
   end
 
   defp pagination_link(socket, text, page, options) do

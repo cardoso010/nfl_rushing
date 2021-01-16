@@ -158,5 +158,12 @@ defmodule NflRushing.StatisticsTest do
       football_player = football_player_fixture()
       assert %Ecto.Changeset{} = Statistics.change_football_player(football_player)
     end
+
+    test "get_stream_from_football_players/1 returns a list of football_player stream" do
+      football_player_fixture()
+      football_player_fixture()
+      assert {:ok, stream} = Statistics.get_stream_from_football_players([])
+      assert is_map(stream)
+    end
   end
 end

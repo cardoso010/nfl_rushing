@@ -6,11 +6,15 @@ defmodule NflRushing.DataConverterTest do
   describe "to_numeric" do
     test "when value is string it need to change to float" do
       assert 1.043 == DataConverter.to_numeric("1,043")
+      assert 1.0 == DataConverter.to_numeric("1,0")
+      assert 1.0 == DataConverter.to_numeric("1.0")
       assert 839 == DataConverter.to_numeric("839")
     end
 
     test "when value is float it need to return the value" do
       assert 1.043 == DataConverter.to_numeric(1.043)
+      assert 1.0 == DataConverter.to_numeric(1.0)
+      assert 839 == DataConverter.to_numeric(839)
     end
   end
 
