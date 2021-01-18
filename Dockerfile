@@ -1,13 +1,20 @@
-FROM bitwalker/alpine-elixir-phoenix:latest
+FROM elixir:1.11.3
 
-WORKDIR /app
+RUN mix local.hex --force \
+    && mix archive.install --force hex phx_new 1.5.7 \
+    && apt-get update \
+    && curl -sL https://deb.nodesource.com/setup_14.x | bash \
+    && apt-get install -y apt-utils \
+    && apt-get install -y nodejs \
+    && apt-get install -y build-essential \
+    && apt-get install -y inotify-tools \
+    && mix local.rebar --force
 
-COPY mix.exs .
-COPY mix.lock .
+ENV APP_HOME /app
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+COPY . $APP_HOME
 
-RUN mkdir assets
+EXPOSE 4000
 
-COPY assets/package.json assets
-COPY assets/package-lock.json assets
-
-CMD mix deps.get && cd assets && npm install && cd .. && mix phx.server
+CMD mix phx.server

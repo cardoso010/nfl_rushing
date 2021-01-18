@@ -1,5 +1,7 @@
 use Mix.Config
 
+# database_url = "#{System.get_env("DATABASE_URL")}test#{System.get_env("MIX_TEST_PARTITION")}"
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used
