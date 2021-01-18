@@ -1,6 +1,6 @@
 use Mix.Config
 
-database_url = "#{System.get_env("DATABASE_URL")}test"
+# database_url = "#{System.get_env("DATABASE_URL")}test#{System.get_env("MIX_TEST_PARTITION")}"
 
 # Configure your database
 #
@@ -8,7 +8,10 @@ database_url = "#{System.get_env("DATABASE_URL")}test"
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :nfl_rushing, NflRushing.Repo,
-  url: database_url,
+  username: "postgres",
+  password: "postgres",
+  database: "nfl_rushing_test#{System.get_env("MIX_TEST_PARTITION")}",
+  hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
