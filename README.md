@@ -1,6 +1,6 @@
 # theScore "the Rush" Interview Challenge
 
-[![Build Status](https://github.com/cardoso010/nfl_rushing/workflows/CI/badge.svg?branch=main)](https://github.com/cardoso010/nfl_rushing/actions)
+[![Build Status](https://github.com/cardoso010/nfl_rushing/workflows/TEST/badge.svg?branch=main)](https://github.com/cardoso010/nfl_rushing/actions)
 
 At theScore, we are always looking for intelligent, resourceful, full-stack developers to join our growing team. To help us evaluate new talent, we have created this take-home interview question. This question should take you no more than a few hours.
 
@@ -62,9 +62,33 @@ We will evaluate you on your ability to solve the problem defined in the require
 
 If you have any questions regarding requirements, do not hesitate to email your contact at theScore for clarification.
 
+## Requirements
+
+Resources that must be installed for this project to work.
+
+- [docker](https://docs.docker.com/install/)
+- [docker-compose](https://docs.docker.com/compose/install/)
+
 ### Installation and running this solution
 
-- Setup the project with `mix setup`
-- Start Phoenix endpoint with `mix phx.server`
+This project uses docker-compose.
+
+First of all you need to build the container
+
+```shell
+docker-compose build
+```
+
+Now is necessary that you run setup to get dependencies, create database, create migrations and run seed.
+
+```shell
+docker-compose run web mix setup
+```
+
+Then you up your container
+
+```shell
+docker-compose up
+```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
