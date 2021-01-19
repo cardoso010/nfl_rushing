@@ -13,7 +13,7 @@ config :nfl_rushing, NflRushing.Repo,
 
 # Configure the database for GitHub Actions
 if System.get_env("GITHUB_ACTIONS") do
-  config :app, App.Repo,
+  config :app, NflRushing.Repo,
     username: "postgres",
     password: "postgres"
 end
