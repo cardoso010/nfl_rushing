@@ -1,6 +1,6 @@
 use Mix.Config
 
-database_url = "#{System.get_env("DATABASE_URL")}test#{System.get_env("MIX_TEST_PARTITION")}"
+database_url = "#{System.get_env("DATABASE_URL")}test"
 
 # Configure your database
 #
@@ -15,7 +15,9 @@ config :nfl_rushing, NflRushing.Repo,
 if System.get_env("GITHUB_ACTIONS") do
   config :nfl_rushing, NflRushing.Repo,
     username: "postgres",
-    password: "postgres"
+    password: "postgres",
+    database: "nfl_rushing_test",
+    hostname: "localhost",
 end
 
 # We don't run a server during test. If one is required,
