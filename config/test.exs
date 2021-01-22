@@ -7,17 +7,19 @@ database_url = "#{System.get_env("DATABASE_URL")}test"
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :nfl_rushing, NflRushing.Repo,
-  url: database_url,
-  pool: Ecto.Adapters.SQL.Sandbox
 
 # Configure the database for GitHub Actions
 if System.get_env("GITHUB_ACTIONS") do
   config :nfl_rushing, NflRushing.Repo,
     username: "postgres",
     password: "postgres",
-    database: "nfl_rushing_test",
+    database: "nfl_rushing_test#{System.get_env("MIX_TEST_PARTITION")}",
     hostname: "localhost",
+    pool: Ecto.Adapters.SQL.Sandbox
+else
+  config :nfl_rushing, NflRushing.Repo,
+    url: database_url,
+    pool: Ecto.Adapters.SQL.Sandbox
 end
 
 # We don't run a server during test. If one is required,

@@ -2,6 +2,8 @@
 
 [![Build Status](https://github.com/cardoso010/nfl_rushing/workflows/TEST/badge.svg?branch=main)](https://github.com/cardoso010/nfl_rushing/actions)
 
+[![Build Status](https://github.com/cardoso010/nfl_rushing/workflows/DEPLOY/badge.svg?branch=main)](https://github.com/cardoso010/nfl_rushing/actions)
+
 At theScore, we are always looking for intelligent, resourceful, full-stack developers to join our growing team. To help us evaluate new talent, we have created this take-home interview question. This question should take you no more than a few hours.
 
 **All candidates must complete this before the possibility of an in-person interview. During the in-person interview, your submitted project will be used as the base for further extensions.**
@@ -91,4 +93,6 @@ Then you up your container
 docker-compose up
 ```
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Now you can visit [`localhost:4000`](http://localhost:4000) from your browser
+
+Or you can visit [`nflrushing.herokuapp.com`](https://nflrushing.herokuapp.com/) as well.
